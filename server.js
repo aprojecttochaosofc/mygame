@@ -8,10 +8,10 @@ const cadastro = require("./caduser/caduser");
 const app = express();
 
 app.get("/", (req, res) => {
-    cadastro(req, res);
+    homepage(req, res);
 });
 app.get("/cadastro", (req, res) => {
-    homepage(req, res);
+    cadastro(req, res);
 });
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
