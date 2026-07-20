@@ -3,7 +3,7 @@ const http = require("http");
 const WebSocket = require("ws");
 
 const homepage = require("./home");
-const cadastro = require("./carduser");
+const cadastro = require("./carduser/carduser");
 
 const app = express();
 
