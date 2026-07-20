@@ -1,11 +1,10 @@
 const express = require("express");
 const http = require("http");
 const WebSocket = require("ws");
- 
-const homepage = require("./home"); 
+
+const homepage = require("./home");
 
 const app = express();
-
 
 app.get("/", (req, res) => {
     homepage(req, res);
@@ -17,15 +16,22 @@ const wss = new WebSocket.Server({ server });
 wss.on("connection", (ws) => {
 
     ws.on("message", (msg) => {
-        const data = JSON.parse(msg.toString());
-        if (data.message == "startserver") {
-            ws.send(JSON.stringify({
-               message: "gamestarted"
-           }));
-        } 
-    });
 
-    
+        let data;
+
+        try {
+            data = JSON.parse(msg.toString());
+        } catch {
+            return;
+        }
+
+        if (data.message === "startserver") {
+            ws.send(JSON.stringify({
+                message: "gamestarted"
+            }));
+        }
+
+    });
 
 });
 
