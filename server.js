@@ -3,13 +3,16 @@ const http = require("http");
 const WebSocket = require("ws");
 
 const homepage = require("./home");
+const cadastro = require("./carduser");
 
 const app = express();
 
 app.get("/", (req, res) => {
+    cadastro(req, res);
+});
+app.get("/cadastro", (req, res) => {
     homepage(req, res);
 });
-
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
