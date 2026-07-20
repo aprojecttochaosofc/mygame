@@ -1,14 +1,6 @@
 module.exports = function homepage(req, res) {
 
     res.send(`
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Nosso Game</title>
-
 <style>
 *{
     margin:0;
@@ -79,10 +71,6 @@ button:hover{
 }
 </style>
 
-</head>
-
-<body>
-
 <div class="container">
 
 <h1>🎮 Nosso Game</h1>
@@ -118,8 +106,6 @@ function showMessage(){
 }
 </script>
 
-</body>
-</html>
     `);
 
 };
