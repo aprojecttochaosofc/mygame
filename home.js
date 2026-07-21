@@ -1,6 +1,6 @@
 module.exports = function homepage(req, res) {
 
-    res.send(`
+    res.send(` 
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
