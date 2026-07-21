@@ -37,7 +37,7 @@ wss.on("connection", (ws) => {
 
         if (data.message === "loginuser") {
             
-            loginuser(ws, res);
+            loginuser(ws, data);
         }
 
     });
