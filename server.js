@@ -4,6 +4,7 @@ const WebSocket = require("ws");
 
 const homepage = require("./home");
 const cadastro = require("./caduser/caduser");
+const loginuser = require("./caduser/loginuser");
 
 const app = express();
 
@@ -35,9 +36,8 @@ wss.on("connection", (ws) => {
         }
 
         if (data.message === "loginuser") {
-            ws.send(JSON.stringify({
-                message: "userlogued"
-            }));
+            
+            loginuser(ws, res);
         }
 
     });
