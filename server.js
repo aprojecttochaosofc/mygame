@@ -19,27 +19,7 @@ const wss = new WebSocket.Server({ server });
 
 wss.on("connection", (ws) => {
 
-    console.log("cliente conectado");
-
-
-    ws.on("close", () => {
-
-        console.log("cliente desconectou");
-
-    });
-
-
-    ws.on("error", (err)=>{
-
-        console.log("erro ws:", err);
-
-    });
-
-
     ws.on("message", (msg) => {
-
-        console.log("mensagem recebida:", msg.toString());
-
 
         let data;
 
@@ -49,22 +29,15 @@ wss.on("connection", (ws) => {
             return;
         }
 
-
         if (data.message === "startserver") {
-
-            console.log("enviando gamestarted");
-
             ws.send(JSON.stringify({
-                message:"gamestarted"
+                message: "gamestarted"
             }));
-
         }
 
-
         if (data.message === "loginuser") {
-
+            
             loginuser(ws, data);
-
         }
 
     });
