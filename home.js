@@ -6,7 +6,7 @@ module.exports = function homepage(req, res) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Habbo Hotel - Um Lugar Divertido com Gente Incrível</title>
+    <title>MEU JOGO ONLINE</title>
     <link rel="stylesheet" type="text/css" href="assets/css/styles.css">
  
 </head>
