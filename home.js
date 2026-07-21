@@ -1,110 +1,85 @@
 module.exports = function homepage(req, res) {
 
     res.send(`
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, sans-serif;
-}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habbo Hotel - Um Lugar Divertido com Gente Incrível</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/styles.css">
+ 
+</head>
+<body>
+    <!-- Header -->
+    <div class="header" id="header"></div>
 
-body{
-    background:#0f172a;
-    color:white;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    overflow:hidden;
-}
 
-.container{
-    text-align:center;
-    max-width:800px;
-    padding:40px;
-}
+    <!-- Main Login/Signup Section -->
+    <div class="main-container">
+        <div class="left-section" id="hotelimage"> 
+        </div>
 
-h1{
-    font-size:4rem;
-    margin-bottom:20px;
-    animation:pulse 2s infinite;
-}
+        <div class="right-section">
+            <!-- LOGIN FORM -->
+            <div class="login-form" id="loginForm">
+                
+            </div>
 
-p{
-    font-size:1.2rem;
-    color:#cbd5e1;
-    margin-bottom:30px;
-}
-
-.card{
-    background:rgba(255,255,255,0.08);
-    padding:25px;
-    border-radius:15px;
-    backdrop-filter:blur(8px);
-}
-
-.status{
-    margin-top:20px;
-    font-weight:bold;
-    color:#22c55e;
-}
-
-button{
-    margin-top:20px;
-    padding:12px 25px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    font-size:16px;
-    transition:0.3s;
-}
-
-button:hover{
-    transform:scale(1.05);
-}
-
-@keyframes pulse{
-    0%{transform:scale(1);}
-    50%{transform:scale(1.03);}
-    100%{transform:scale(1);}
-}
-</style>
-
-<div class="container">
-
-<h1>🎮 Nosso Game</h1>
-
-<div class="card">
-    <p>
-        Bem-vindo ao portal oficial do nosso projeto.
-    </p>
-
-    <p>
-        Estamos desenvolvendo uma nova experiência multiplayer.
-        O jogo ainda está em produção e novas funcionalidades
-        estão sendo implementadas diariamente.
-    </p>
-
-    <div class="status">
-        🚀 Lançamento em breve
+            <!-- SIGNUP FORM -->
+            <div class="signup-form" id="signupForm">
+                
+            </div>
+        </div>
     </div>
 
-    <button onclick="showMessage()">
-        Acompanhar Desenvolvimento
-    </button>
+    <!-- Mobile Menu Toggle -->
+    <button class="menu-toggle" id="menuToggle">☰ MENU</button>
 
-    <p id="msg" style="margin-top:20px;"></p>
-</div>
+    <!-- Navigation -->
+    <div class="nav" id="navMenu">
+       
+    </div>
 
-</div>
+    <!-- News Section -->
+    <div class="news-section">
+        <div class="news-main">
+            <h2 class="section-title">Últimas Notícias</h2>
 
-<script>
-function showMessage(){
-    document.getElementById("msg").innerHTML =
-        "Obrigado pelo interesse! Em breve teremos novidades sobre o lançamento.";
-}
-</script>
+            <!-- Featured News -->
+            <div class="featured-news" id="featurednews">
+                
+            </div>
+
+            <!-- News Grid -->
+            <div class="news-grid" id="newsgrid">
+                
+            </div>
+
+            <div class="more-news">
+                <a href="#">MAIS NOTÍCIAS »</a>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="news-sidebar" id="newssidebar">
+            
+ 
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+       
+        <div class="footer-bottom">
+            <div>© 2004 - 2026 Sulake Corporation Ltd. Habbo é uma marca registrada da Sulake na União Europeia, EUA, Japão, China e vários outras jurisdições. Todos os direitos reservados.</div>
+            <div class="footer-logo">Sulake</div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="assets/js/functions.js"></script>
+</body>
+</html>
 
     `);
 
