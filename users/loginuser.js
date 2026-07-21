@@ -1,4 +1,4 @@
-module.exports = function loginuser(req, res) {
+module.exports = function loginuser(ws, data) {
   ws.send(JSON.stringify({ 
                 message: "userlogued"
             }));
