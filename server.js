@@ -2,6 +2,7 @@ const express = require("express");
 const http = require("http");
 const WebSocket = require("ws");
 
+const callconfigs = require("./config");
 const homepage = require("./home");
 const cadastro = require("./caduser/caduser");
 const loginuser = require("./users/loginuser");
