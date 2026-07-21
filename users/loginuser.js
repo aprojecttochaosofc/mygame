@@ -20,9 +20,44 @@ const pool = new Pool({
 });
 
 module.exports = function loginuser(ws, data) {
-  ws.send(JSON.stringify({ 
-                message: "userlogued",
-                dados:data
+ 
+
+
+    async function checkLogin(email, password) {
+
+        try {
+
+            const result = await pool.query(
+                "SELECT * FROM users WHERE email = $1 AND password = $2",
+                [email, password]
+            );
+
+            if (result.rows.length > 0) {
+
+                const userId = createUserId(email);
+
+                 ws.send(JSON.stringify({ 
+                    message: "userlogued",
+                    dados:data
+                }));
+
+            } else {    
+                ws.send(JSON.stringify({
+                    message: "loginfailed"
+                }));
+
+            }
+
+        } catch (err) {
+            ws.send(JSON.stringify({
+                message: "servererror"
             }));
+
+        }
+    }
+
+    checkLogin(data.email, data.password);
+
+    
   
 }
