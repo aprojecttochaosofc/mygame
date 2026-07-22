@@ -1,14 +1,13 @@
 $(document).ready(function() {
             // Switch between login and signup forms
-            $('#enterBtn, #switchToSignup').on('click', function() {
-                $('#loginForm').slideToggle(300);
-                $('#signupForm').slideToggle(300);
-            });
+            $('#enterBtn, #switchToSignup').on('click', function () {
 
-            $('#backBtn').on('click', function() {
-                $('#loginForm').slideToggle(300);
-                $('#signupForm').slideToggle(300);
-            });
+			    $('#loginForm').slideToggle(300);
+			    $('#signupForm').slideToggle(300);
+
+			});
+
+            
 
             // Login button
             $('#connectBtn').on('click', function() {
@@ -16,53 +15,19 @@ $(document).ready(function() {
                 const password = $('#loginPassword').val();
 
                 if(!email || !password) {
-                    alert('Por favor preencha todos os campos!');
+                    Alert7.alert('Por favor preencha todos os campos!');
                     return;
                 }
 
                 if(!email.includes('@')) {
-                    alert('E-mail inválido!');
+                    Alert7.alert('E-mail inválido!');
                     return;
                 }
 
-                alert('Login efetuado com sucesso!\nE-mail: ' + email);
+                Alert7.alert('Login efetuado com sucesso!\nE-mail: ' + email);
             });
 
-            // Signup button
-            $('#createBtn').on('click', function() {
-                const name = $('#signupName').val();
-                const email = $('#signupEmail').val();
-                const password = $('#signupPassword').val();
-                const confirmPassword = $('#signupPasswordConfirm').val();
-                const captcha = $('#captchaCheckbox').is(':checked');
-
-                if(!name || !email || !password || !confirmPassword) {
-                    alert('Por favor preencha todos os campos!');
-                    return;
-                }
-
-                if(!email.includes('@')) {
-                    alert('E-mail inválido!');
-                    return;
-                }
-
-                if(password.length < 6) {
-                    alert('A senha deve ter no mínimo 6 caracteres!');
-                    return;
-                }
-
-                if(password !== confirmPassword) {
-                    alert('As senhas não correspondem!');
-                    return;
-                }
-
-                if(!captcha) {
-                    alert('Por favor confirme que você não é um robô!');
-                    return;
-                }
-
-                alert('Conta criada com sucesso!\nBem-vindo ' + name + '!');
-            });
+            
 
             // Mobile menu toggle
             $('#menuToggle').on('click', function() {
@@ -85,9 +50,10 @@ $(document).ready(function() {
             });
         });
 
-
+$("#overlay").hide();
 
 function createObjects(type){
+
 
     switch(type){
 
@@ -95,14 +61,14 @@ function createObjects(type){
 
             return `
                 <div class="header-left">
-                    <div class="logo">MEU JOGO ONLINE</div>
+                    <div class="logo"><img src="assets/images/headlogo.png"></div>
                     <div class="header-title">
                         UM LUGAR DIVERTIDO COM GENTE INCRÍVEL.
                     </div>
                 </div>
 
                 <button class="enter-btn" id="enterBtn">
-                    ENTRE GRÁTIS!
+                    CADASTRE-SE!
                 </button>
             `;
         break;
@@ -110,7 +76,7 @@ function createObjects(type){
         case 'hotelimage':
 
             return `
-                <img src="assets/images/baner1.jpg">
+                <img src="assets/images/banerlogo.png">
             `;
         break;
 
@@ -149,7 +115,7 @@ function createObjects(type){
                     <label for="signupName">Nome Completo</label>
                     <input type="text" id="signupName" placeholder="Digite seu nome completo">
                 </div>
-
+  				
                 <div class="form-group">
                     <label for="signupEmail">E-mail</label>
                     <input type="email" id="signupEmail" placeholder="Digite seu e-mail">
@@ -157,24 +123,24 @@ function createObjects(type){
 
                 <div class="form-group">
                     <label for="signupPassword">Senha</label>
-                    <input type="password" id="signupPassword" placeholder="Digite uma senha forte">
+                    <input type="password" id="password" placeholder="Digite uma senha forte">
                 </div>
 
                 <div class="form-group">
                     <label for="signupPasswordConfirm">Redigitar Senha</label>
-                    <input type="password" id="signupPasswordConfirm" placeholder="Confirme sua senha">
+                    <input type="password" id="repassword" placeholder="Confirme sua senha">
                 </div>
 
                 <div class="captcha-container">
-                    <input type="checkbox" id="captchaCheckbox" class="captcha-checkbox">
-                    <label for="captchaCheckbox" class="captcha-text">
-                        Não sou um robô - <strong>reCAPTCHA</strong>
-                    </label>
-                </div>
+				    <input type="checkbox" id="captchaCheckbox" class="captcha-checkbox">
 
-                <div class="form-actions-signup">
-                    <button class="create-btn" id="createBtn">CRIAR CONTA</button>
-                    <button class="back-btn" id="backBtn">VOLTAR</button>
+				    <label for="captchaCheckbox" class="captcha-text">
+				        Não sou um robô - <strong>reCAPTCHA</strong>
+				    </label>
+				</div>
+
+                <div class="form-actions-signup" id="btncad">
+                    
                 </div>
             `;
         break;
@@ -200,7 +166,7 @@ function createObjects(type){
             </div>
         </div>
         <div class="nav-item">
-            <div class="nav-link">🛍️ HABBOSHOP</div>
+            <div class="nav-link">🛍️ SHOP</div>
             <div class="dropdown">
                 <a href="#">Moedas</a>
                 <a href="#">Itens em Destaque</a>
@@ -234,8 +200,8 @@ function createObjects(type){
                      <img src="assets/images/baner1.jpg">
                 </div>
                 <div class="featured-news-content">
-                    <h3>JULHO NO HABBO:<br>ARCO-ÍRIS NA PRAIA</h3>
-                    <p class="news-meta">31 de julho | Habbo Updates • Campanhas e Atividades</p>
+                    <h3>JULHO NO :<br>ARCO-ÍRIS NA PRAIA</h3>
+                    <p class="news-meta">31 de julho |  Updates • Campanhas e Atividades</p>
                     <p>Um mês na costa – novos móbis para criar, itens náuticos na Loja Ducket e um LTD que vai espalhar areia por toda parte.</p>
                 </div>
             `;
@@ -264,7 +230,7 @@ function createObjects(type){
                 <div class="sidebar-box">
                 <h3>DICAS DE SEGURANÇA</h3>
                 <p>Proteja-se de maneira inteligente! Aprenda como <strong>manter-se seguro</strong> na internet.</p>
-                <p style="margin-top: 10px;">O Habbo Hotel é recomendado para maiores de 18 anos.</p>
+                <p style="margin-top: 10px;">O  Hotel é recomendado para maiores de 18 anos.</p>
             </div>
             `;
         break;
@@ -280,3 +246,43 @@ document.getElementById("navMenu").innerHTML = createObjects("navMenu");
 document.getElementById("featurednews").innerHTML = createObjects("featurednews");
 document.getElementById("newsgrid").innerHTML = createObjects("newsgrid");
 document.getElementById("newssidebar").innerHTML = createObjects("newssidebar");
+
+ 
+	
+$('#createBtn').on('click', function() {
+                const name=$("#signupName").val(); 
+				const email=$("#signupEmail").val(); 
+				const password=$("#password").val(); 
+				const repassword=$("#repassword").val();
+				const captchaCheckbox=$("#captchaCheckbox").val();
+
+                if(!name || !email || !password || !repassword) {
+                    Alert7.alert('Por favor preencha todos os campos!');
+                    return;
+                }
+
+                if(!email.includes('@')) {
+                    Alert7.alert('E-mail inválido!');
+                    return;
+                }
+
+                if(password.length < 6) {
+                    Alert7.alert('A senha deve ter no mínimo 6 caracteres!');
+                    return;
+                }
+
+                if(password !== confirmPassword) {
+                    Alert7.alert('As senhas não correspondem!');
+                    return;
+                }
+
+                if(!captcha) {
+                    Alert7.alert('Por favor confirme que você não é um robô!');
+                    return;
+                }
+
+                Alert7.alert('Conta criada com sucesso!\nBem-vindo ' + name + '!');
+            });
+
+
+ 
