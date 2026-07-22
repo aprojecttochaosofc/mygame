@@ -8,9 +8,16 @@ module.exports = function homepage(req, res) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MEU JOGO ONLINE</title>
     <link rel="stylesheet" type="text/css" href="assets/css/styles.css">
- 
+ 	<link href="assets/css/slidercaptcha.min.css" rel="stylesheet" />
+ 	<script type="text/javascript" src="assets/js/alert7.js"></script>
+ 	<link rel="icon" href="assets/images/icone.png" type="image/png" id="favicon"/>
 </head>
 <body>
+	 <div id="overlay">
+    <div id="captcha">
+        <!-- seu captcha aqui -->
+    </div>
+</div>
     <!-- Header -->
     <div class="header" id="header"></div>
 
@@ -76,8 +83,69 @@ module.exports = function homepage(req, res) {
             <div class="footer-logo">Sulake</div>
         </div>
     </div>
+
+    <script src="assets/js/longbow.slidercaptcha.min.js"></script>
+				    <script>
+				        
+				    	function captchaslide(){
+
+    var captcha = sliderCaptcha({
+        id: 'captcha',
+        repeatIcon: 'fa fa-redo',
+
+        onSuccess: function () {
+
+            var handler = setTimeout(function () {
+
+                window.clearTimeout(handler);
+
+                document.getElementById("btncad").innerHTML = `
+                    <button class="create-btn" id="createBtn">
+                        CRIAR CONTA
+                    </button>
+
+                    <button class="back-btn" id="backBtn">
+                        VOLTAR
+                    </button>
+                `;
+                $("#overlay").hide();
+                $('#backBtn').on('click', function() {
+	                $('#loginForm').slideToggle(300);
+				    $('#signupForm').slideToggle(300);
+				    $("#captcha,#btncad").html('');
+				    $("#captchaCheckbox").prop("checked", false);
+	            });
+            }, 500);
+
+        }
+    });
+
+}
+
+
+document.addEventListener("change", function(e){
+
+    if(e.target && e.target.id === "captchaCheckbox"){
+
+        if(e.target.checked){
+
+            $("#overlay").show();
+
+            captchaslide();
+
+             
+
+        }
+
+    }
+
+});
+
+				        </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="assets/js/functions.js"></script>
+
+
 </body>
 </html>
 
