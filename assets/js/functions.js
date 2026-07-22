@@ -286,3 +286,56 @@ $('#createBtn').on('click', function() {
 
 
  
+function captchaslide(){
+
+    var captcha = sliderCaptcha({
+        id: 'captcha',
+        repeatIcon: 'fa fa-redo',
+
+        onSuccess: function () {
+
+            var handler = setTimeout(function () {
+
+                window.clearTimeout(handler);
+
+                document.getElementById("btncad").innerHTML = `
+                    <button class="create-btn" id="createBtn">
+                        CRIAR CONTA
+                    </button>
+
+                    <button class="back-btn" id="backBtn">
+                        VOLTAR
+                    </button>
+                `;
+                $("#overlay").hide();
+                $('#backBtn').on('click', function() {
+	                $('#loginForm').slideToggle(300);
+				    $('#signupForm').slideToggle(300);
+				    $("#captcha,#btncad").html('');
+				    $("#captchaCheckbox").prop("checked", false);
+	            });
+            }, 500);
+
+        }
+    });
+
+}
+
+
+document.addEventListener("change", function(e){
+
+    if(e.target && e.target.id === "captchaCheckbox"){
+
+        if(e.target.checked){
+
+            $("#overlay").show();
+
+            captchaslide();
+
+             
+
+        }
+
+    }
+
+});
