@@ -5,14 +5,18 @@ const path = require("path");
 const callconfigs = require("./config");
 const homepage = require("./home");
 const cadastro = require("./caduser/caduser");
-const loginuser = require("./users/loginuser");
+const loginuser = require("./users/loginuser"); 
 
 const app = express();
 
 app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 app.get("/", (req, res) => {
-    homepage(req, res);
+
+    res.sendFile(
+        path.join(__dirname, "index.html")
+    );
+
 });
 
 app.get("/cadastro", (req, res) => {
