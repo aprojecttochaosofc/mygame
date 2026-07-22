@@ -110,7 +110,7 @@ module.exports = function homepage(req, res) {
 
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
 <script src="assets/js/longbow.slidercaptcha.min.js"></script>
 
@@ -212,7 +212,7 @@ document.addEventListener("change", function(e){
 </script>
 
 
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="assets/js/functions.js"></script>
 
 
