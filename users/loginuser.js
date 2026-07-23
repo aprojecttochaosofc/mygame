@@ -2,7 +2,12 @@ const { Pool } = require("pg");
 const crypto = require("crypto");
 
 const callconfigs = require("../config");
-
+function convertmd5(texto) {
+    return crypto
+        .createHash("md5")
+        .update(String(texto))
+        .digest("hex");
+}
 function createUserId(email) {
     const emailMd5 = crypto
         .createHash("md5")
@@ -56,7 +61,7 @@ module.exports = function loginuser(ws, data) {
         }
     }
 
-    checkLogin(data.email, data.password);
+    checkLogin(data.email, convertmd5(data.password));
 
     
   
