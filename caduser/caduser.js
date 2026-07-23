@@ -7,22 +7,18 @@ const pool = new Pool({
     connectionString: callconfigs("postgre"),
     ssl: { rejectUnauthorized: false }
 });
-const crypto = require("crypto");
 
-
-module.exports = function cadusers(ws, data) {
- 
-
-
-    async function checkLogin(data) {
-        function convertmd5(texto) {
-
+function convertmd5(texto) {
     return crypto
         .createHash("md5")
         .update(String(texto))
         .digest("hex");
-
 }
+
+module.exports = function cadusers(ws, data) {
+
+    async function checkLogin() {
+
         try {
 
             const result = await pool.query(
@@ -30,49 +26,53 @@ module.exports = function cadusers(ws, data) {
                 [data.signupEmail]
             );
 
-            if (result.rows.length > 0) {  
+            if (result.rows.length > 0) {
 
-                 ws.send(JSON.stringify({ 
+                ws.send(JSON.stringify({
                     message: "userexists",
-                    dados:data
+                    dados: data
                 }));
 
-            } else {    
-                
+                return;
 
-                const insertuser = await pool.query(
-                            "INSERT INTO users (nome, apelido, email, password) VALUES ($1, $2, $3, $4)",
-                            [
-                                data.signupName,
-                                data.signupApelido,
-                                data.signupEmail,
-                                convertmd5(data.password)
-                            ]
-                        );
+            }
 
-                if (insertuser.rowCount > 0) {
-                    ws.send(JSON.stringify({
-                        message: "usercreated"
-                    }));
-                }else{
-                    ws.send(JSON.stringify({
-                        message: "usernotcreated"
-                    }));
-                }
+            const insertuser = await pool.query(
+                "INSERT INTO users (nome, apelido, email, password) VALUES ($1, $2, $3, $4)",
+                [
+                    data.signupName,
+                    data.signupApelido,
+                    data.signupEmail,
+                    convertmd5(data.password)
+                ]
+            );
+
+            if (insertuser.rowCount > 0) {
+
+                ws.send(JSON.stringify({
+                    message: "usercreated"
+                }));
+
+            } else {
+
+                ws.send(JSON.stringify({
+                    message: "usernotcreated"
+                }));
 
             }
 
         } catch (err) {
+
             console.error(err);
+
             ws.send(JSON.stringify({
                 message: "servererror"
             }));
 
         }
+
     }
 
-    checkLogin(data);
+    checkLogin();
 
-    
-  
-}
+};
