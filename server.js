@@ -5,7 +5,8 @@ const path = require("path");
 const callconfigs = require("./config");
 const homepage = require("./home");
 const cadusers = require("./caduser/caduser");
-const loginuser = require("./users/loginuser"); 
+const loginuser = require("./users/loginuser");
+const uploadimage = require("./users/uploadimage"); 
 
 const app = express();
 
