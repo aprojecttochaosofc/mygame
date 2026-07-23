@@ -1,3 +1,80 @@
+function showLoading(){
+
+    if(document.getElementById("loading"))
+        return;
+
+    // Adiciona o CSS apenas uma vez
+    if(!document.getElementById("loading-style")){
+
+        const style = document.createElement("style");
+
+        style.id = "loading-style";
+
+        style.innerHTML = `
+            #loading{
+                position:fixed;
+                top:0;
+                left:0;
+                width:100%;
+                height:100%;
+                background:rgba(0,0,0,0.6);
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                z-index:999999;
+            }
+
+            #loading .loader{
+                width:50px;
+                height:50px;
+                border:6px solid rgba(255,255,255,0.3);
+                border-top:6px solid #ffffff;
+                border-radius:50%;
+                animation:loadingSpin 1s linear infinite;
+            }
+
+            @keyframes loadingSpin{
+                from{
+                    transform:rotate(0deg);
+                }
+
+                to{
+                    transform:rotate(360deg);
+                }
+            }
+        `;
+
+        document.head.appendChild(style);
+
+    }
+
+    const loading = document.createElement("div");
+
+    loading.id = "loading";
+
+    loading.innerHTML = `
+        <div class="loader"></div>
+    `;
+
+    document.body.appendChild(loading);
+
+}
+
+
+
+function hideLoading(){
+
+    const loading = document.getElementById("loading");
+
+    if(loading){
+
+        loading.remove();
+
+    }
+
+}
+
+
 $(document).ready(function() {
             // Switch between login and signup forms
             $('#enterBtn, #switchToSignup').on('click', function () {
@@ -51,7 +128,41 @@ $(document).ready(function() {
         });
 
 $("#overlay").hide();
+function loadPaises(){
 
+    $.getJSON("assets/paises.json", function(paises){
+
+        const select = $("#signupPais");
+
+        select.empty();
+
+        select.append(
+            $('<option>', {
+                value: "",
+                text: "Escolha o país",
+                disabled: true,
+                selected: true
+            })
+        );
+
+        $.each(paises, function(i, pais){
+
+            select.append(
+                $('<option>', {
+                    value: pais.sigla,
+                    text: pais.nome_pais
+                })
+            );
+
+        });
+
+    }).fail(function(){
+
+        Alert7.alert("Não foi possível carregar a lista de países.");
+
+    });
+
+}
 function createObjects(type){
 
 
@@ -123,7 +234,12 @@ function createObjects(type){
                     <label for="signupEmail">E-mail</label>
                     <input type="email" id="signupEmail" placeholder="Digite seu e-mail">
                 </div>
-
+                <div class="form-group">
+				    <label for="signupPais">País</label>
+				    <select id="signupPais">
+				        <option value="" selected disabled>Escolha o país</option>
+				    </select>
+				</div>
                 <div class="form-group">
                     <label for="signupPassword">Senha</label>
                     <input type="password" id="password" placeholder="Digite uma senha forte">
@@ -146,6 +262,7 @@ function createObjects(type){
                     
                 </div>
             `;
+
         break;
 
 
@@ -249,7 +366,9 @@ document.getElementById("navMenu").innerHTML = createObjects("navMenu");
 document.getElementById("featurednews").innerHTML = createObjects("featurednews");
 document.getElementById("newsgrid").innerHTML = createObjects("newsgrid");
 document.getElementById("newssidebar").innerHTML = createObjects("newssidebar");
+$("#signupForm").html(createObjects("singnup"));
 
+loadPaises();
  const socket = new WebSocket("wss://worldofwar.up.railway.app");
 
 
@@ -273,12 +392,12 @@ socket.onmessage = function(e){
 
     if(data.message == "usercreated"){ 
     	Alert7.alert('Conta criada com sucesso!\nBem-vindo!');
-
+    	hideLoading();
     } 
 
     if(data.message == "usernotcreated"){ 
     	Alert7.alert('O usuário nao pode ser criado!');
-
+    	hideLoading();
     } 
 
 };
@@ -296,17 +415,13 @@ socket.onclose = function(){
 
 };
 
-	
-function createUsers(){
-	const name=$("#signupName").val(); 
-				const signupName=$("#signupName").val();
-				const signupApelido=$("#signupApelido").val();
-				const signupEmail=$("#signupEmail").val();  
-				const password=$("#password").val(); 
-				const repassword=$("#repassword").val();
-				const captchaCheckbox=$("#captchaCheckbox").val();
 
-                if(!signupName || !signupApelido ||  !signupEmail || !password || !repassword) { 
+function crseateUsers(){
+	const name=$("#signupName").val();   
+				const signupEmail=$("#signupEmail").val();  
+				const password=$("#password").val();  
+
+                if( !signupEmail || !password ) { 
                     Alert7.alert('Por favor preencha todos os campos!');
                     return;
                 }
@@ -321,24 +436,95 @@ function createUsers(){
                     return;
                 }
 
-                if(password !== repassword) {
-                    Alert7.alert('As senhas não correspondem!');
-                    return;
-                }
-
-                if(!captchaCheckbox) {
-                    Alert7.alert('Por favor confirme que você não é um robô!');
-                    return;
-                }
+                
 
                 
                 socket.send(JSON.stringify({
-			        message:"caduser",
-			        signupName:signupName,
-			        signupApelido:signupApelido,
+			        message:"loginuser",  
 			        signupEmail:signupEmail,
 			        password:password, 
 			    }));
+}
+
+function createUsers(){
+
+    const signupName = $("#signupName").val().trim();
+    const signupApelido = $("#signupApelido").val().trim();
+    const signupEmail = $("#signupEmail").val().trim().toLowerCase();
+    const signupPais = $("#signupPais").val().trim();
+    const password = $("#password").val();
+    const repassword = $("#repassword").val();
+    const captchaCheckbox = $("#captchaCheckbox").is(":checked");
+
+    if(!signupName || !signupApelido || !signupEmail || !signupPais || !password || !repassword){
+        Alert7.alert("Por favor preencha todos os campos!");
+        return;
+    }
+
+    if(password.length < 6){
+        Alert7.alert("A senha deve ter no mínimo 6 caracteres!");
+        return;
+    }
+
+    if(!/[A-Z]/.test(password)){
+        Alert7.alert("A senha deve conter pelo menos uma letra maiúscula!");
+        return;
+    }
+
+    if(!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]/.test(password)){
+        Alert7.alert("A senha deve conter pelo menos um símbolo!");
+        return;
+    }
+
+    if(password !== repassword){
+        Alert7.alert("As senhas não correspondem!");
+        return;
+    }
+
+    if(!captchaCheckbox){
+        Alert7.alert("Por favor confirme que você não é um robô!");
+        return;
+    }
+
+    const partes = signupEmail.split("@");
+
+    if(partes.length != 2){
+        Alert7.alert("E-mail inválido!");
+        return;
+    }
+
+    const dominio = partes[1];
+
+    $.getJSON("assets/mails.json", function(mails){
+
+        if(!mails.includes(dominio)){
+            Alert7.alert("O domínio do e-mail não é permitido.");
+            return;
+        }
+        showLoading();
+        socket.send(JSON.stringify({
+            message: "caduser",
+            signupName: signupName,
+            signupApelido: signupApelido,
+            signupPais:signupPais,
+            signupEmail: signupEmail,
+            password: password
+        }));
+
+    }).fail(function(xhr, status, error){
+    	hideLoading();
+    console.log("Status HTTP:", xhr.status);
+    console.log("Status:", status);
+    console.log("Erro:", error);
+    console.log("Resposta:", xhr.responseText);
+
+    Alert7.alert("Não foi possível validar o e-mail.");
+
+});
+    if(!signupPais){
+        Alert7.alert("Por favor escolha um pais!");
+        return;
+    }
 }
 
 
