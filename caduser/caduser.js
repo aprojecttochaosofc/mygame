@@ -12,7 +12,7 @@ module.exports = function cadusers(ws, data) {
  
 
 
-    async function checkLogin(email, password) {
+    async function checkLogin(data) {
 
         try {
 
