@@ -21,25 +21,42 @@ function createUserId(email) {
 
 const pool = new Pool({
     connectionString: callconfigs("postgre"),
-    ssl: { rejectUnauthorized: false }
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
 
 module.exports = function loginuser(ws, data) {
  
 
 
-    async function checkLogin(data) {
+    async function checkLogin() {
 
         var email=data.email;
         var password=convertmd5(data.pass)
 
         try {
 
-           ws.send(JSON.stringify({ 
+            const result = await pool.query(
+                "SELECT * FROM users WHERE email = $1 AND password = $2",
+                [email, password]
+            );
+
+            if (result.rows.length > 0) {
+
+                const userId = createUserId(email);
+
+                 ws.send(JSON.stringify({ 
                     message: "userlogued",
-                    email:email,
-               password:password
+                    dados:data
                 }));
+
+            } else {    
+                ws.send(JSON.stringify({
+                    message: "loginfailed"
+                }));
+
+            }
 
         } catch (err) {
             console.log("ERRO LOGIN:", err);
@@ -50,7 +67,7 @@ module.exports = function loginuser(ws, data) {
         }
     }
 
-    checkLogin(data);
+    checkLogin();
 
     
   
