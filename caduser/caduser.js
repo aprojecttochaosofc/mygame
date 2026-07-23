@@ -49,6 +49,7 @@ module.exports = function cadusers(ws, data) {
             }
 
         } catch (err) {
+            console.error(err);
             ws.send(JSON.stringify({
                 message: "servererror"
             }));
