@@ -43,7 +43,8 @@ wss.on("connection", (ws) => {
 
         if (data.message === "startserver") {
             ws.send(JSON.stringify({
-                message: "gamestarted"
+                message: "gamestarted",
+                datas:data
             }));
         }
         if (data.message === "caduser") {           
