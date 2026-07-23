@@ -45,7 +45,7 @@ module.exports = function cadusers(ws, data) {
                             [
                                 data.signupName,
                                 data.signupApelido,
-                                convertmd5(data.signupEmail),
+                                data.signupEmail,
                                 convertmd5(data.password)
                             ]
                         );
