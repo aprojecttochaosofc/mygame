@@ -31,9 +31,22 @@ module.exports = function cadusers(ws, data) {
                 }));
 
             } else {    
-                ws.send(JSON.stringify({
-                    message: "usercreated"
-                }));
+                
+
+                const insertuser = await pool.query(
+                    "INSERT * FROM users WHERE NAME=$1 and email = $2 AND password = $3",
+                    [data.signupName,data.signupEmail, data.password]
+                );
+
+                if(insertuser){
+                    ws.send(JSON.stringify({
+                        message: "usercreated"
+                    }));
+                }else{
+                    ws.send(JSON.stringify({
+                        message: "usernotcreated"
+                    }));
+                }
 
             }
 
