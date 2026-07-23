@@ -21,7 +21,9 @@ function createUserId(email) {
 
 const pool = new Pool({
     connectionString: callconfigs("postgre"),
-    ssl: { rejectUnauthorized: false }
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
 
 module.exports = function loginuser(ws, data) {
