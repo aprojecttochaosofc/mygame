@@ -35,7 +35,7 @@ module.exports = function cadusers(ws, data) {
                             "INSERT INTO users (nome, apelido, email, password) VALUES ($1, $2, $3, $4)",
                             [
                                 data.signupName,
-                                data.signupNickname,
+                                data.signupApelido,
                                 data.signupEmail,
                                 data.password
                             ]
