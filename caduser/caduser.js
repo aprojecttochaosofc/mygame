@@ -7,7 +7,16 @@ const pool = new Pool({
     connectionString: callconfigs("postgre"),
     ssl: { rejectUnauthorized: false }
 });
+const crypto = require("crypto");
 
+function convertmd5(texto) {
+
+    return crypto
+        .createHash("md5")
+        .update(String(texto))
+        .digest("hex");
+
+}
 module.exports = function cadusers(ws, data) {
  
 
@@ -36,8 +45,8 @@ module.exports = function cadusers(ws, data) {
                             [
                                 data.signupName,
                                 data.signupApelido,
-                                data.signupEmail,
-                                data.password
+                                convertmd5(data.signupEmail),
+                                convertmd5(data.password)
                             ]
                         );
 
