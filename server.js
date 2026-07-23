@@ -4,7 +4,7 @@ const WebSocket = require("ws");
 const path = require("path");
 const callconfigs = require("./config");
 const homepage = require("./home");
-const cadastro = require("./caduser/caduser");
+const cadastro = require("./caduser/cadusers");
 const loginuser = require("./users/loginuser"); 
 
 const app = express();
@@ -45,10 +45,8 @@ wss.on("connection", (ws) => {
                 message: "gamestarted"
             }));
         }
-        if (data.message === "caduser") {
-            ws.send(JSON.stringify({
-                message: "usercreated"
-            }));
+        if (data.message === "caduser") {           
+            cadastro(ws,data);
         }
 
         if (data.message === "loginuser") {
