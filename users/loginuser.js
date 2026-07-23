@@ -28,7 +28,7 @@ module.exports = function loginuser(ws, data) {
  
 
 
-    async function checkLogin() {
+    async function checkLogin(data) {
 
         var email=data.email;
         var password=convertmd5(data.pass)
@@ -50,7 +50,7 @@ module.exports = function loginuser(ws, data) {
         }
     }
 
-    checkLogin();
+    checkLogin(data);
 
     
   
