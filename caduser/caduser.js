@@ -34,9 +34,9 @@ module.exports = function cadusers(ws, data) {
                 
 
                 const insertuser = await pool.query(
-                    "INSERT * FROM users WHERE NAME=$1 and email = $2 AND password = $3",
-                    [data.signupName,data.signupEmail, data.password]
-                );
+                        "INSERT INTO users (name, email, password) VALUES ($1, $2, $3)",
+                        [data.signupName, data.signupEmail, data.password]
+                    );
 
                 if(insertuser){
                     ws.send(JSON.stringify({
