@@ -4,7 +4,7 @@ const WebSocket = require("ws");
 const path = require("path");
 const callconfigs = require("./config");
 const homepage = require("./home");
-const cadastro = require("./caduser/caduser");
+const cadusers = require("./caduser/caduser");
 const loginuser = require("./users/loginuser"); 
 
 const app = express();
@@ -46,7 +46,7 @@ wss.on("connection", (ws) => {
             }));
         }
         if (data.message === "caduser") {           
-            cadastro(ws,data);
+            cadusers(ws,data);
         }
 
         if (data.message === "loginuser") {
