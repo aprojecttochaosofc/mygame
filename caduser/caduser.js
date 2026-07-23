@@ -36,7 +36,7 @@ module.exports = function cadusers(ws, data) {
                         [data.signupName, data.signupEmail, data.password]
                     );
 
-                if(insertuser){
+                if (insertuser.rowCount > 0) {
                     ws.send(JSON.stringify({
                         message: "usercreated"
                     }));
