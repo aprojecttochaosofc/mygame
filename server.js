@@ -45,7 +45,11 @@ wss.on("connection", (ws) => {
                 message: "gamestarted"
             }));
         }
-
+        if (data.message === "caduser") {
+            ws.send(JSON.stringify({
+                message: "usercreated"
+            }));
+        }
 
         if (data.message === "loginuser") {
             loginuser(ws, data);
