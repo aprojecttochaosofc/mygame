@@ -17,8 +17,8 @@ module.exports = function cadusers(ws, data) {
         try {
 
             const result = await pool.query(
-                "SELECT * FROM users WHERE email = $1 AND password = $2",
-                [data.signupEmail, data.password]
+                "SELECT id FROM users WHERE email = $1",
+                [data.signupEmail]
             );
 
             if (result.rows.length > 0) {
