@@ -56,6 +56,7 @@ module.exports = function loginuser(ws, data) {
             }
 
         } catch (err) {
+            console.log("ERRO LOGIN:", err);
             ws.send(JSON.stringify({
                 message: "servererror"
             }));
