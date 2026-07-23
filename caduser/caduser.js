@@ -21,9 +21,7 @@ module.exports = function cadusers(ws, data) {
                 [data.signupEmail]
             );
 
-            if (result.rows.length > 0) {
-
-                const userId = createUserId(email);
+            if (result.rows.length > 0) {  
 
                  ws.send(JSON.stringify({ 
                     message: "userexists",
