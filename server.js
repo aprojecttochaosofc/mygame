@@ -52,11 +52,7 @@ wss.on("connection", (ws) => {
         }
 
         if (data.message === "loginuser") {
-            //loginuser(ws, data);
-             ws.send(JSON.stringify({
-                message: "userlogued",
-                 datas:data
-            }));
+            loginuser(ws, data); 
         }
 
     });
