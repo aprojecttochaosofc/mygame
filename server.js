@@ -4,7 +4,7 @@ const WebSocket = require("ws");
 const path = require("path");
 const callconfigs = require("./config");
 const homepage = require("./home");
-const cadastro = require("./caduser/cadusers");
+const cadastro = require("./caduser/caduser");
 const loginuser = require("./users/loginuser"); 
 
 const app = express();
