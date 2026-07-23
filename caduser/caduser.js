@@ -9,7 +9,13 @@ const pool = new Pool({
 });
 const crypto = require("crypto");
 
-function convertmd5(texto) {
+
+module.exports = function cadusers(ws, data) {
+ 
+
+
+    async function checkLogin(data) {
+        function convertmd5(texto) {
 
     return crypto
         .createHash("md5")
@@ -17,12 +23,6 @@ function convertmd5(texto) {
         .digest("hex");
 
 }
-module.exports = function cadusers(ws, data) {
- 
-
-
-    async function checkLogin(data) {
-
         try {
 
             const result = await pool.query(
