@@ -115,7 +115,10 @@ function createObjects(type){
                     <label for="signupName">Nome Completo</label>
                     <input type="text" id="signupName" placeholder="Digite seu nome completo">
                 </div>
-  				
+  				<div class="form-group">
+                    <label for="signupName">Apelido</label>
+                    <input type="text" id="signupApelido" placeholder="Digite seu apelido">
+                </div>
                 <div class="form-group">
                     <label for="signupEmail">E-mail</label>
                     <input type="email" id="signupEmail" placeholder="Digite seu e-mail">
@@ -247,21 +250,68 @@ document.getElementById("featurednews").innerHTML = createObjects("featurednews"
 document.getElementById("newsgrid").innerHTML = createObjects("newsgrid");
 document.getElementById("newssidebar").innerHTML = createObjects("newssidebar");
 
- 
+ const socket = new WebSocket("wss://worldofwar.up.railway.app");
+
+
+
+
+
+socket.onopen = function(){
+
+    socket.send(JSON.stringify({
+        message:"startserver"
+    }));
+
+};
+
+
+socket.onmessage = function(e){
+
+    const data = JSON.parse(e.data);
+    console.log(data)
+
+
+    if(data.message == "usercreated"){ 
+    	Alert7.alert('Conta criada com sucesso!\nBem-vindo!');
+
+    } 
+
+    if(data.message == "usernotcreated"){ 
+    	Alert7.alert('O usuário nao pode ser criado!');
+
+    } 
+
+};
+
+socket.onerror = function(e){
+
+    console.log("erro websocket", e);
+
+};
+
+
+socket.onclose = function(){
+
+    console.log("socket fechado");
+
+};
+
 	
-$('#createBtn').on('click', function() {
-                const name=$("#signupName").val(); 
-				const email=$("#signupEmail").val(); 
+function createUsers(){
+	const name=$("#signupName").val(); 
+				const signupName=$("#signupName").val();
+				const signupApelido=$("#signupApelido").val();
+				const signupEmail=$("#signupEmail").val();  
 				const password=$("#password").val(); 
 				const repassword=$("#repassword").val();
 				const captchaCheckbox=$("#captchaCheckbox").val();
 
-                if(!name || !email || !password || !repassword) {
+                if(!signupName || !signupApelido ||  !signupEmail || !password || !repassword) { 
                     Alert7.alert('Por favor preencha todos os campos!');
                     return;
                 }
 
-                if(!email.includes('@')) {
+                if(!signupEmail.includes('@')) {
                     Alert7.alert('E-mail inválido!');
                     return;
                 }
@@ -271,18 +321,25 @@ $('#createBtn').on('click', function() {
                     return;
                 }
 
-                if(password !== confirmPassword) {
+                if(password !== repassword) {
                     Alert7.alert('As senhas não correspondem!');
                     return;
                 }
 
-                if(!captcha) {
+                if(!captchaCheckbox) {
                     Alert7.alert('Por favor confirme que você não é um robô!');
                     return;
                 }
 
-                Alert7.alert('Conta criada com sucesso!\nBem-vindo ' + name + '!');
-            });
+                
+                socket.send(JSON.stringify({
+			        message:"caduser",
+			        signupName:signupName,
+			        signupApelido:signupApelido,
+			        signupEmail:signupEmail,
+			        password:password, 
+			    }));
+}
 
 
  
@@ -299,7 +356,7 @@ function captchaslide(){
                 window.clearTimeout(handler);
 
                 document.getElementById("btncad").innerHTML = `
-                    <button class="create-btn" id="createBtn">
+                    <button class="create-btn" id="createBtn" onclick="scripts:createUsers();">
                         CRIAR CONTA
                     </button>
 
