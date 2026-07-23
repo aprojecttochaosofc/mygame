@@ -711,4 +711,35 @@
     z-index: 9999;
 }
 
- 
+ #signupPais {
+    width: 100%;
+    padding: 12px 10px;
+
+    background: transparent;
+
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 2px;
+
+    color: white;
+
+    font-size: 14px;
+
+    outline: none;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+
+/* quando clicar nele */
+#signupPais:focus {
+    border-color: white;
+}
+
+
+/* opções abertas */
+#signupPais option {
+    background: #111;
+    color: white;
+}
