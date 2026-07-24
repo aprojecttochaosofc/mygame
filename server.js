@@ -6,7 +6,7 @@ const callconfigs = require("./config");
 const homepage = require("./home");
 const cadusers = require("./caduser/caduser");
 const loginuser = require("./users/loginuser");
-const loginuser = playerupdate("./users/playerupdate");
+const playerupdate = playerupdate("./users/playerupdate");
 
 const app = express();
 
