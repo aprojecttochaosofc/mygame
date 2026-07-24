@@ -112,17 +112,16 @@ wss.on("connection",(ws)=>{
 
 
 
-        if(data.message === "loginuser"){
+       if (data.message === "loginuser") {
 
+    loginuser(
+        ws,
+        data,
+        players,
+        clients
+    );
 
-            loginuser(
-                ws,
-                data,
-                clients
-            );
-
-
-        }
+}
 
 
 
