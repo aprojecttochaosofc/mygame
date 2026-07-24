@@ -11,7 +11,7 @@ const loginuser = playerupdate("./users/playerupdate");
 const app = express();
 
 app.use("/assets", express.static(path.join(__dirname, "assets")));
-
+const players = {};
 app.get("/", (req, res) => {
 
     res.sendFile(
