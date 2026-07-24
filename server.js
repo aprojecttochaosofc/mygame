@@ -6,7 +6,7 @@ const callconfigs = require("./config");
 const homepage = require("./home");
 const cadusers = require("./caduser/caduser");
 const loginuser = require("./users/loginuser");
-
+const loginuser = playerupdate("./users/playerupdate");
 
 const app = express();
 
@@ -53,6 +53,10 @@ wss.on("connection", (ws) => {
 
         if (data.message === "loginuser") {
             loginuser(ws, data); 
+        }
+
+         if (data.message === "playerupdate") {
+            playerupdate(ws, data); 
         }
 
     });
