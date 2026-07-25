@@ -44,16 +44,16 @@ const pool = new Pool({
 
 
 
-module.exports = function loginuser(ws, data, players, clients ,lastPing) {
+module.exports = function loginuser(ws, data, players, clients, lastPing) {
 
 
 
 async function checkLogin(){
 
 
-    var email=data.email;
+    var email = data.email;
 
-    var password=convertmd5(data.pass);
+    var password = convertmd5(data.pass);
 
 
 
@@ -77,13 +77,18 @@ async function checkLogin(){
 
 
 
-            // guarda quem é esse socket
+            // salva qual usuário pertence a esse socket
             clients.set(
                 ws,
                 userId
             );
 
+
+
+            // registra atividade do jogador
             lastPing[userId] = Date.now();
+
+
 
             ws.send(JSON.stringify({
 
@@ -97,13 +102,31 @@ async function checkLogin(){
 
 
 
-            // manda os jogadores que já estavam online
+
+            // envia somente os outros jogadores online
+
+            let others = {};
+
+
+            for(let id in players){
+
+
+                if(id !== userId){
+
+                    others[id] = players[id];
+
+                }
+
+
+            }
+
+
 
             ws.send(JSON.stringify({
 
                 message:"playerssnapshot",
 
-                players:players
+                players:others
 
             }));
 
@@ -118,6 +141,7 @@ async function checkLogin(){
                 message:"loginfailed"
 
             }));
+
 
         }
 
