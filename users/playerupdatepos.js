@@ -8,21 +8,9 @@ const pool = new Pool({
     }
 });
 
-
-module.exports = function playerupdatepos(ws,data,clients){
+module.exports = function playerupdatepos(ws, data) {
 
     async function updatePos(){
-
-        let userid = clients.get(ws);
-
-
-        if(!userid){
-
-            console.log("Usuário não autenticado");
-            return;
-
-        }
-
 
         try{
 
@@ -32,43 +20,39 @@ module.exports = function playerupdatepos(ws,data,clients){
                 SET
                     posx = $1,
                     posy = $2,
-                    stage = $3,
-                    atualizado_em = CURRENT_TIMESTAMP
-                WHERE session_id = $4
+                    stage = $3
+                WHERE email = $4
                 `,
                 [
                     data.posx,
                     data.posy,
                     data.stage,
-                    userid
+                    data.email
                 ]
             );
 
 
             if(result.rowCount > 0){
 
-                console.log(
-                    "Posição salva:",
-                    userid
-                );
+                console.log("Posição salva:", data.email);
 
             }
             else{
 
-                console.log(
-                    "Usuário não encontrado no banco"
-                );
+                ws.send(JSON.stringify({
+                    message:"playerupdatefail"
+                }));
 
             }
-
 
         }
         catch(err){
 
-            console.log(
-                "ERRO UPDATE POS:",
-                err
-            );
+            console.log("ERRO UPDATE POS:", err);
+
+            ws.send(JSON.stringify({
+                message:"servererror"
+            }));
 
         }
 
@@ -77,4 +61,4 @@ module.exports = function playerupdatepos(ws,data,clients){
 
     updatePos();
 
-}
+};
