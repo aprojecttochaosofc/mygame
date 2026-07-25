@@ -78,7 +78,7 @@ wss.on("connection", (ws) => {
             playerupdate(data, players);
         }
         if(data.message === "playerupdatepos"){
-            playerupdatepos(data, players);
+            playerupdatepos(data);
         }
         if(data.message === "disconect"){
 
