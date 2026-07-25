@@ -90,16 +90,18 @@ async function checkLogin(){
 
 
 
-            ws.send(JSON.stringify({
+            const user = result.rows[0];
 
-                message:"userlogued",
-                email:email,
-                userid:userId,
-                posx:posx,
-                posy:posy,
-                stage:stage,
-
-            }));
+        ws.send(JSON.stringify({
+        
+            message:"userlogued",
+            email:email,
+            userid:userId,
+            posx:user.posx,
+            posy:user.posy,
+            stage:user.stage
+        
+        }));
 
 
 
