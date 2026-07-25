@@ -67,7 +67,7 @@ wss.on("connection", (ws) => {
             }));
         }
        if(data.message === "initialpos"){
-            initialpos(data);
+            initialpos(ws,data);
         }
         if(data.message === "caduser"){
             cadusers(ws,data);
