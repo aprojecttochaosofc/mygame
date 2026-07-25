@@ -44,7 +44,7 @@ const pool = new Pool({
 
 
 
-module.exports = function loginuser(ws, data, players, clients) {
+module.exports = function loginuser(ws, data, players, client,lastPing) {
 
 
 
