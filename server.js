@@ -39,6 +39,16 @@ wss.on("connection", (ws) => {
             return;
         }
 
+
+        lastServerResponse = Date.now();
+
+
+        if(data.message == "pong"){
+    
+            return;
+    
+        }
+     
         if(data.message === "startserver"){
             ws.send(JSON.stringify({
                 message:"gamestarted",
