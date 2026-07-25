@@ -93,10 +93,11 @@ async function checkLogin(){
             ws.send(JSON.stringify({
 
                 message:"userlogued",
-
                 email:email,
-
-                userid:userId
+                userid:userId,
+                posx:posx,
+                posy:posy,
+                stage:stage,
 
             }));
 
