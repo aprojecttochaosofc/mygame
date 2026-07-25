@@ -76,7 +76,7 @@ wss.on("connection", (ws) => {
 
 setInterval(() => {
     broadcast(wss,players,clients);
-},100);
+},20);
 
 
 server.listen(process.env.PORT || 3000, () => {
