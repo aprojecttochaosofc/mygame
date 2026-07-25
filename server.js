@@ -40,13 +40,14 @@ wss.on("connection", (ws) => {
         }
 
 
-        lastServerResponse = Date.now();
+        if(data.message === "ping"){
 
-
-        if(data.message == "pong"){
-    
-            return;
-    
+            ws.send(JSON.stringify({
+        
+                message:"pong"
+        
+            }));
+        
         }
      
         if(data.message === "startserver"){
