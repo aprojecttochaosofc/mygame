@@ -40,7 +40,7 @@ wss.on("connection", (ws) => {
         } catch {
             return;
         }
-
+        
 
        if(data.message === "ping"){
 
@@ -65,7 +65,9 @@ wss.on("connection", (ws) => {
                 datas:data
             }));
         }
-
+       if(data.message === "initialpos"){
+            initialpos(data);
+        }
         if(data.message === "caduser"){
             cadusers(ws,data);
         }
