@@ -77,7 +77,13 @@ wss.on("connection", (ws) => {
 setInterval(() => {
     broadcast(wss,players,clients);
 },20);
-
+function convertmd5(texto) {
+    return crypto
+        .createHash("md5")
+        .update(String(texto))
+        .digest("hex");
+}
+console.log('texto '+convertmd5('@A123456'))
 
 server.listen(process.env.PORT || 3000, () => {
     console.log("Servidor online");
