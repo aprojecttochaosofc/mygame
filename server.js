@@ -70,7 +70,7 @@ wss.on("connection", (ws) => {
         }
 
         if(data.message === "loginuser"){
-            loginuser(ws,data,players,clients);
+            loginuser(ws,data,players,clients,lastPing);
         }
 
         if(data.message === "playerupdate"){
