@@ -9,7 +9,7 @@ const pool = new Pool({
 });
 
 module.exports = function playerupdatepos(data) {
-
+console.log("RECEBI POS:", data);
     async function updatePos(){
 
         try{
