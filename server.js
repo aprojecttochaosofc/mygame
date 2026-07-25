@@ -89,9 +89,21 @@ wss.on("connection", (ws) => {
        
                delete players[data.userid];
        
-               ws.send(JSON.stringify({
-                message:"disconected", 
-            }));
+               wss.clients.forEach(client => {
+
+                   if(client.readyState === WebSocket.OPEN){
+               
+                       client.send(JSON.stringify({
+               
+                           message:"disconected",
+               
+                           userid:data.userid
+               
+                       }));
+               
+                   }
+               
+               });
        
            }
        
