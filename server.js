@@ -69,6 +69,21 @@ wss.on("connection", (ws) => {
             playerupdate(data, players);
         }
 
+        if(data.message === "disconect"){
+
+           if(data.userid){
+       
+               delete players[data.userid];
+       
+               console.log(
+                   "Player removido:",
+                   data.userid
+               );
+       
+           }
+       
+       }
+
     });
 
 
