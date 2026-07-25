@@ -14,7 +14,6 @@ function convertmd5(texto) {
 }
 
 
-
 function createUserId(email) {
 
     const emailMd5 = crypto
@@ -47,7 +46,6 @@ const pool = new Pool({
 module.exports = function loginuser(ws, data, players, clients, lastPing) {
 
 
-
 async function checkLogin(){
 
 
@@ -76,60 +74,51 @@ async function checkLogin(){
             const userId = createUserId(email);
 
 
-
-            // salva qual usuário pertence a esse socket
             clients.set(
                 ws,
                 userId
             );
 
 
-
-            // registra atividade do jogador
             lastPing[userId] = Date.now();
 
 
 
             const user = result.rows[0];
 
-        ws.send(JSON.stringify({
-        
-            message:"userlogued",
-            email:email,
-            userid:userId,
-            posx:user.posx,
-            posy:user.posy,
-            stage:user.stage
-        
-        }));
+
+
+            // cria somente esse jogador no servidor
+            players[userId] = {
+
+                id:userId,
+
+                x:user.posx,
+
+                y:user.posy,
+
+                stage:user.stage,
+
+                animation:"player_idle_down"
+
+            };
 
 
 
-
-            // envia somente os outros jogadores online
-
-            let others = {};
-
-
-            for(let id in players){
-
-
-                if(id !== userId){
-
-                    others[id] = players[id];
-
-                }
-
-
-            }
-
-
-
+            // responde somente para quem logou
             ws.send(JSON.stringify({
 
-                message:"playerssnapshot",
+                message:"userlogued",
 
-                players:others
+                email:email,
+
+                userid:userId,
+
+                posx:user.posx,
+
+                posy:user.posy,
+
+                stage:user.stage
 
             }));
 
@@ -175,7 +164,6 @@ async function checkLogin(){
 
 
 checkLogin();
-
 
 
 }
