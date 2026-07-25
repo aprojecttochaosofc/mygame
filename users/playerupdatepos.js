@@ -1,178 +1,80 @@
 const { Pool } = require("pg");
-const crypto = require("crypto");
-
 const callconfigs = require("../config");
 
-
-function convertmd5(texto) {
-
-    return crypto
-        .createHash("md5")
-        .update(String(texto))
-        .digest("hex");
-
-}
-
-
-
-function createUserId(email) {
-
-    const emailMd5 = crypto
-        .createHash("md5")
-        .update(email.toLowerCase())
-        .digest("hex");
-
-
-    const sessionId = crypto.randomUUID();
-
-
-    return `${sessionId}_${emailMd5}`;
-
-}
-
-
-
 const pool = new Pool({
-
     connectionString: callconfigs("postgre"),
-
     ssl:{
         rejectUnauthorized:false
     }
-
 });
 
 
+module.exports = function playerupdatepos(ws,data,clients){
 
-module.exports = function loginuser(ws, data, players, clients, lastPing) {
+    async function updatePos(){
 
-
-
-async function checkLogin(){
-
-
-    var email = data.email;
-
-    var password = convertmd5(data.pass);
+        let userid = clients.get(ws);
 
 
+        if(!userid){
 
-    try{
+            console.log("Usuário não autenticado");
+            return;
 
-
-        const result = await pool.query(
-            "SELECT * FROM users WHERE email = $1 AND password = $2",
-            [
-                email,
-                password
-            ]
-        );
+        }
 
 
+        try{
 
-        if(result.rows.length > 0){
-
-
-            const userId = createUserId(email);
-
-
-
-            // salva qual usuário pertence a esse socket
-            clients.set(
-                ws,
-                userId
+            const result = await pool.query(
+                `
+                UPDATE users
+                SET
+                    posx = $1,
+                    posy = $2,
+                    stage = $3,
+                    atualizado_em = CURRENT_TIMESTAMP
+                WHERE session_id = $4
+                `,
+                [
+                    data.posx,
+                    data.posy,
+                    data.stage,
+                    userid
+                ]
             );
 
 
+            if(result.rowCount > 0){
 
-            // registra atividade do jogador
-            lastPing[userId] = Date.now();
+                console.log(
+                    "Posição salva:",
+                    userid
+                );
 
+            }
+            else{
 
-
-            ws.send(JSON.stringify({
-
-                message:"userlogued",
-
-                email:email,
-
-                userid:userId
-
-            }));
-
-
-
-
-            // envia somente os outros jogadores online
-
-            let others = {};
-
-
-            for(let id in players){
-
-
-                if(id !== userId){
-
-                    others[id] = players[id];
-
-                }
-
+                console.log(
+                    "Usuário não encontrado no banco"
+                );
 
             }
 
 
+        }
+        catch(err){
 
-            ws.send(JSON.stringify({
-
-                message:"playerssnapshot",
-
-                players:others
-
-            }));
-
-
+            console.log(
+                "ERRO UPDATE POS:",
+                err
+            );
 
         }
-        else{
-
-
-            ws.send(JSON.stringify({
-
-                message:"loginfailed"
-
-            }));
-
-
-        }
-
-
-
-    }
-    catch(err){
-
-
-        console.log(
-            "ERRO LOGIN:",
-            err
-        );
-
-
-        ws.send(JSON.stringify({
-
-            message:"servererror"
-
-        }));
-
 
     }
 
 
-}
-
-
-
-checkLogin();
-
-
+    updatePos();
 
 }
