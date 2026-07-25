@@ -75,10 +75,9 @@ wss.on("connection", (ws) => {
        
                delete players[data.userid];
        
-               console.log(
-                   "Player removido:",
-                   data.userid
-               );
+               ws.send(JSON.stringify({
+                message:"disconected", 
+            }));
        
            }
        
