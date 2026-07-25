@@ -2,7 +2,7 @@ const express = require("express");
 const http = require("http");
 const WebSocket = require("ws");
 const path = require("path");
- 
+
 const cadusers = require("./caduser/caduser");
 const loginuser = require("./users/loginuser");
 const playerupdate = require("./users/playerupdate");
@@ -30,6 +30,7 @@ const server = http.createServer(app);
 
 const wss = new WebSocket.Server({server});
 
+
 wss.on("connection", (ws) => {
 
     ws.on("message", (msg) => {
@@ -41,94 +42,126 @@ wss.on("connection", (ws) => {
         } catch {
             return;
         }
-        
 
-       if(data.message === "ping"){
 
-           if(data.userid){
-       
-               lastPing[data.userid] = Date.now();
-       
-           }
-       
-       
-           ws.send(JSON.stringify({
-       
-               message:"pong"
-       
-           }));
-       
-       }
-     
-        if(data.message === "startserver"){
+        if(data.message === "ping"){
+
+            if(data.userid){
+
+                lastPing[data.userid] = Date.now();
+
+            }
+
+
             ws.send(JSON.stringify({
-                message:"gamestarted",
-                datas:data
+
+                message:"pong"
+
             }));
+
         }
-       if(data.message === "initialpos"){
+
+
+        if(data.message === "startserver"){
+
+            ws.send(JSON.stringify({
+
+                message:"gamestarted",
+
+                datas:data
+
+            }));
+
+        }
+
+
+        if(data.message === "initialpos"){
+
             initialpos(ws,data);
+
         }
+
+
         if(data.message === "caduser"){
+
             cadusers(ws,data);
+
         }
+
 
         if(data.message === "loginuser"){
+
             loginuser(ws,data,players,clients,lastPing);
+
         }
+
 
         if(data.message === "playerupdate"){
+
             playerupdate(data, players);
+
         }
+
+
         if(data.message === "playerupdatepos"){
+
             playerupdatepos(data);
+
         }
+
+
         if(data.message === "disconect"){
 
-           if(data.userid){
-       
-               delete players[data.userid];
-       
-               wss.clients.forEach(client => {
+            if(data.userid){
 
-                   if(client.readyState === WebSocket.OPEN){
-               
-                       client.send(JSON.stringify({
-               
-                           message:"disconected",
-               
-                           userid:data.userid
-               
-                       }));
-               
-                   }
-               
-               });
-       
-           }
-       
-       }
+                delete players[data.userid];
+
+
+                ws.send(JSON.stringify({
+
+                    message:"disconected"
+
+                }));
+
+            }
+
+        }
+
 
     });
+
 
 
     ws.on("close", () => {
 
         let userid = clients.get(ws);
 
+
         if(userid){
+
             delete players[userid];
+
             clients.delete(ws);
+
         }
+
 
     });
 
+
 });
 
+
+
 setInterval(() => {
+
     broadcast(wss,players,clients);
+
 },20);
- setInterval(()=>{
+
+
+
+setInterval(()=>{
 
     let now = Date.now();
 
@@ -158,6 +191,10 @@ setInterval(() => {
 
 },5000);
 
+
+
 server.listen(process.env.PORT || 3000, () => {
+
     console.log("Servidor online");
+
 });
