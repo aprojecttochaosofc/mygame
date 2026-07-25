@@ -8,6 +8,7 @@ const loginuser = require("./users/loginuser");
 const playerupdate = require("./users/playerupdate");
 const broadcast = require("./users/broadcast");
 const playerupdatepos = require("./users/playerupdatepos");
+const initialpos = require("./users/initialpos");
 
 const app = express();
 
