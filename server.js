@@ -2,7 +2,7 @@ const express = require("express");
 const http = require("http");
 const WebSocket = require("ws");
 const path = require("path");
-
+const crypto = require("crypto");
 const cadusers = require("./caduser/caduser");
 const loginuser = require("./users/loginuser");
 const playerupdate = require("./users/playerupdate");
