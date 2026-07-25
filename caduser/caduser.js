@@ -38,15 +38,18 @@ module.exports = function cadusers(ws, data) {
             }
 
             const insertuser = await pool.query(
-                "INSERT INTO users (nome, apelido,pais, email, password) VALUES ($1, $2, $3, $4, $5)",
-                [
-                    data.signupName,
-                    data.signupApelido,                   
-                    data.signupPais,
-                    data.signupEmail,
-                    convertmd5(data.password)
-                ]
-            );
+                    "INSERT INTO users (nome, apelido, pais, email, password, posx, posy, stage) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)",
+                    [
+                        data.signupName,
+                        data.signupApelido,
+                        data.signupPais,
+                        data.signupEmail,
+                        convertmd5(data.password),
+                        50,
+                        50,
+                        1
+                    ]
+                );
 
             if (insertuser.rowCount > 0) {
 
