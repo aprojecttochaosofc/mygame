@@ -110,7 +110,35 @@ wss.on("connection", (ws) => {
 setInterval(() => {
     broadcast(wss,players,clients);
 },20);
- 
+ setInterval(()=>{
+
+    let now = Date.now();
+
+
+    for(let id in lastPing){
+
+
+        if(now - lastPing[id] > 10000){
+
+
+            console.log(
+                "Removendo jogador fantasma:",
+                id
+            );
+
+
+            delete players[id];
+
+            delete lastPing[id];
+
+
+        }
+
+
+    }
+
+
+},5000);
 
 server.listen(process.env.PORT || 3000, () => {
     console.log("Servidor online");
