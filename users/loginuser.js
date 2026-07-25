@@ -83,7 +83,7 @@ async function checkLogin(){
                 userId
             );
 
-
+            lastPing[userId] = Date.now();
 
             ws.send(JSON.stringify({
 
