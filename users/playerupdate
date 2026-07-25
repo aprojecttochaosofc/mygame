@@ -1,6 +1,15 @@
 module.exports = function playerupdate(ws, data, players, wss) {
 
 
+    if(!data.userid){
+
+        console.log("PLAYER UPDATE SEM ID:", data);
+
+        return;
+
+    }
+
+
     players[data.userid] = {
 
         id:data.userid,
