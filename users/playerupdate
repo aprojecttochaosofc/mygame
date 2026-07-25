@@ -1,4 +1,4 @@
-module.exports = function playerupdate(ws, data, players, wss) {
+module.exports = function playerupdate(data, players) {
 
 
     if(!data.userid){
