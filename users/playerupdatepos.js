@@ -8,7 +8,7 @@ const pool = new Pool({
     }
 });
 
-module.exports = function playerupdatepos(ws, data) {
+module.exports = function playerupdatepos(data) {
 
     async function updatePos(){
 
