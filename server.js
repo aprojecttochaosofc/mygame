@@ -14,6 +14,7 @@ app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 const players = {};
 const clients = new Map();
+const lastPing = {};
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
@@ -40,15 +41,22 @@ wss.on("connection", (ws) => {
         }
 
 
-        if(data.message === "ping"){
+       if(data.message === "ping"){
 
-            ws.send(JSON.stringify({
-        
-                message:"pong"
-        
-            }));
-        
-        }
+           if(data.userid){
+       
+               lastPing[data.userid] = Date.now();
+       
+           }
+       
+       
+           ws.send(JSON.stringify({
+       
+               message:"pong"
+       
+           }));
+       
+       }
      
         if(data.message === "startserver"){
             ws.send(JSON.stringify({
