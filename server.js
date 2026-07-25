@@ -7,6 +7,7 @@ const cadusers = require("./caduser/caduser");
 const loginuser = require("./users/loginuser");
 const playerupdate = require("./users/playerupdate");
 const broadcast = require("./users/broadcast");
+const playerupdatepos = require("./users/playerupdatepos");
 
 const app = express();
 
@@ -76,7 +77,9 @@ wss.on("connection", (ws) => {
         if(data.message === "playerupdate"){
             playerupdate(data, players);
         }
-
+        if(data.message === "playerupdatepos"){
+            playerupdatepos(data, players);
+        }
         if(data.message === "disconect"){
 
            if(data.userid){
