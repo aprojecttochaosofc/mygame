@@ -33,18 +33,49 @@ const wss = new WebSocket.Server({server});
 
 wss.on("connection", (ws) => {
 
+
+    // flag de bloqueio do jogador
+    ws.disconnected = false;
+
+
+
     ws.on("message", (msg) => {
+
 
         let data;
 
         try {
+
             data = JSON.parse(msg.toString());
+
         } catch {
+
             return;
+
         }
 
 
+
+        // bloqueia tudo depois do disconnect
+        // deixa somente ping e startserver
+
+        if(ws.disconnected){
+
+            if(
+                data.message !== "ping" &&
+                data.message !== "startserver"
+            ){
+
+                return;
+
+            }
+
+        }
+
+
+
         if(data.message === "ping"){
+
 
             if(data.userid){
 
@@ -62,7 +93,9 @@ wss.on("connection", (ws) => {
         }
 
 
+
         if(data.message === "startserver"){
+
 
             ws.send(JSON.stringify({
 
@@ -75,46 +108,70 @@ wss.on("connection", (ws) => {
         }
 
 
+
         if(data.message === "initialpos"){
+
 
             initialpos(ws,data);
 
+
         }
+
 
 
         if(data.message === "caduser"){
 
+
             cadusers(ws,data);
 
+
         }
+
 
 
         if(data.message === "loginuser"){
 
+
             loginuser(ws,data,players,clients,lastPing);
 
+
         }
+
 
 
         if(data.message === "playerupdate"){
 
+
             playerupdate(data, players);
 
+
         }
+
 
 
         if(data.message === "playerupdatepos"){
 
+
             playerupdatepos(data);
+
 
         }
 
 
+
         if(data.message === "disconect"){
+
 
             if(data.userid){
 
+
+                // ativa bloqueio imediatamente
+                ws.disconnected = true;
+
+
+
                 delete players[data.userid];
+
 
 
                 ws.send(JSON.stringify({
@@ -124,94 +181,134 @@ wss.on("connection", (ws) => {
                 }));
 
 
+
+
                 wss.clients.forEach(client=>{
 
-                        if(client !== ws && client.readyState === WebSocket.OPEN){
-            
-                            client.send(JSON.stringify({
-            
-                                message:"playeroffline",
-            
-                                userid:data.userid
-            
-                            }));
-            
-                        }
-            
-                    });
+
+                    if(
+                        client !== ws &&
+                        client.readyState === WebSocket.OPEN
+                    ){
+
+
+                        client.send(JSON.stringify({
+
+                            message:"playeroffline",
+
+                            userid:data.userid
+
+                        }));
+
+
+                    }
+
+
+                });
+
+
 
             }
+
 
         }
 
 
+
     });
+
+
 
 
 
     ws.on("close", () => {
 
+
         let userid = clients.get(ws);
+
 
 
         if(userid){
 
+
             delete players[userid];
 
+
             clients.delete(ws);
+
 
         }
 
 
     });
+
 
 
 });
 
 
 
+
 setInterval(() => {
 
+
     broadcast(wss,players,clients);
+
 
 },20);
 
 
 
+
 setInterval(()=>{
 
+
     let now = Date.now();
+
 
 
     for(let id in lastPing){
 
 
+
         if(now - lastPing[id] > 10000){
 
 
+
             console.log(
+
                 "Removendo jogador fantasma:",
+
                 id
+
             );
+
 
 
             delete players[id];
 
+
             delete lastPing[id];
+
 
 
         }
 
 
+
     }
+
 
 
 },5000);
 
 
 
+
 server.listen(process.env.PORT || 3000, () => {
 
+
     console.log("Servidor online");
+
 
 });
