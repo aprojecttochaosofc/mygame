@@ -26,6 +26,7 @@ app.get("/cadastro", (req, res) => {
     cadastro(req, res);
 });
 
+
 const server = http.createServer(app);
 
 const wss = new WebSocket.Server({server});
@@ -34,15 +35,11 @@ const wss = new WebSocket.Server({server});
 wss.on("connection", (ws) => {
 
 
-    // flag de bloqueio do jogador
-    ws.disconnected = false;
-
-
-
     ws.on("message", (msg) => {
 
 
         let data;
+
 
         try {
 
@@ -51,24 +48,6 @@ wss.on("connection", (ws) => {
         } catch {
 
             return;
-
-        }
-
-
-
-        // bloqueia tudo depois do disconnect
-        // deixa somente ping e startserver
-
-        if(ws.disconnected){
-
-            if(
-                data.message !== "ping" &&
-                data.message !== "startserver"
-            ){
-
-                return;
-
-            }
 
         }
 
@@ -119,6 +98,7 @@ wss.on("connection", (ws) => {
 
 
 
+
         if(data.message === "caduser"){
 
 
@@ -132,20 +112,31 @@ wss.on("connection", (ws) => {
         if(data.message === "loginuser"){
 
 
-            loginuser(ws,data,players,clients,lastPing);
+            loginuser(
+                ws,
+                data,
+                players,
+                clients,
+                lastPing
+            );
 
 
         }
+
 
 
 
         if(data.message === "playerupdate"){
 
 
-            playerupdate(data, players);
+            playerupdate(
+                data,
+                players
+            );
 
 
         }
+
 
 
 
@@ -159,15 +150,12 @@ wss.on("connection", (ws) => {
 
 
 
+
+
         if(data.message === "disconect"){
 
 
             if(data.userid){
-
-
-                // ativa bloqueio imediatamente
-                ws.disconnected = true;
-
 
 
                 delete players[data.userid];
@@ -176,7 +164,9 @@ wss.on("connection", (ws) => {
 
                 ws.send(JSON.stringify({
 
+
                     message:"disconected"
+
 
                 }));
 
@@ -194,9 +184,11 @@ wss.on("connection", (ws) => {
 
                         client.send(JSON.stringify({
 
+
                             message:"playeroffline",
 
                             userid:data.userid
+
 
                         }));
 
@@ -224,6 +216,7 @@ wss.on("connection", (ws) => {
     ws.on("close", () => {
 
 
+
         let userid = clients.get(ws);
 
 
@@ -240,6 +233,7 @@ wss.on("connection", (ws) => {
         }
 
 
+
     });
 
 
@@ -249,13 +243,22 @@ wss.on("connection", (ws) => {
 
 
 
+
+
 setInterval(() => {
 
 
-    broadcast(wss,players,clients);
+    broadcast(
+        wss,
+        players,
+        clients
+    );
 
 
 },20);
+
+
+
 
 
 
@@ -276,11 +279,8 @@ setInterval(()=>{
 
 
             console.log(
-
                 "Removendo jogador fantasma:",
-
                 id
-
             );
 
 
@@ -295,7 +295,6 @@ setInterval(()=>{
         }
 
 
-
     }
 
 
@@ -305,10 +304,14 @@ setInterval(()=>{
 
 
 
-server.listen(process.env.PORT || 3000, () => {
 
 
-    console.log("Servidor online");
 
+server.listen(
+    process.env.PORT || 3000,
+    () => {
 
-});
+        console.log("Servidor online");
+
+    }
+);
