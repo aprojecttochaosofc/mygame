@@ -1,48 +1,3 @@
-const { Pool } = require("pg");
-const crypto = require("crypto");
-
-const callconfigs = require("../config");
-
-
-function convertmd5(texto) {
-
-    return crypto
-        .createHash("md5")
-        .update(String(texto))
-        .digest("hex");
-
-}
-
-
-function createUserId(email) {
-
-    const emailMd5 = crypto
-        .createHash("md5")
-        .update(email.toLowerCase())
-        .digest("hex");
-
-
-    const sessionId = crypto.randomUUID();
-
-
-    return `${sessionId}_${emailMd5}`;
-
-}
-
-
-
-const pool = new Pool({
-
-    connectionString: callconfigs("postgre"),
-
-    ssl:{
-        rejectUnauthorized:false
-    }
-
-});
-
-
-
 module.exports = function loginuser(ws, data, players, clients, lastPing) {
 
 
@@ -57,14 +12,34 @@ async function checkLogin(){
 
     try{
 
+        let result;
 
-        const result = await pool.query(
-            "SELECT * FROM users WHERE email = $1 AND password = $2",
-            [
-                email,
-                password
-            ]
-        );
+
+        if(data.reconnect === true){
+
+
+            result = await pool.query(
+                "SELECT * FROM users WHERE email = $1",
+                [
+                    email
+                ]
+            );
+
+
+        }
+        else{
+
+
+            result = await pool.query(
+                "SELECT * FROM users WHERE email = $1 AND password = $2",
+                [
+                    email,
+                    password
+                ]
+            );
+
+
+        }
 
 
 
@@ -74,10 +49,12 @@ async function checkLogin(){
             const userId = createUserId(email);
 
 
+
             clients.set(
                 ws,
                 userId
             );
+
 
 
             lastPing[userId] = Date.now();
@@ -88,7 +65,6 @@ async function checkLogin(){
 
 
 
-            // cria somente esse jogador no servidor
             players[userId] = {
 
                 id:userId,
@@ -105,7 +81,6 @@ async function checkLogin(){
 
 
 
-            // responde somente para quem logou
             ws.send(JSON.stringify({
 
                 message:"userlogued",
