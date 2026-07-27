@@ -9,6 +9,7 @@ const playerupdate = require("./users/playerupdate");
 const broadcast = require("./users/broadcast");
 const playerupdatepos = require("./users/playerupdatepos");
 const initialpos = require("./users/initialpos");
+const getprofileuser = require("./users/getprofileuser");
 
 const app = express();
 
@@ -61,6 +62,10 @@ wss.on("connection", (ws) => {
 
             case 'loginuser':
                 loginuser(ws,data,players,clients,lastPing);
+                break
+
+            case 'getprofileuser':
+                getprofileuser(ws,data,players,clients,lastPing);
                 break
 
             
