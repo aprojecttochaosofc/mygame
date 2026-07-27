@@ -1,21 +1,18 @@
 const { Pool } = require("pg");
 const crypto = require("crypto");
-
 const callconfigs = require("../config");
 
-
-function convertmd5(texto) {
-
-    return crypto
-        .createHash("md5")
-        .update(String(texto))
-        .digest("hex");
-
+function convertmd5(texto){
+    return crypto.createHash("md5").update(String(texto)).digest("hex");
 }
 
+function createUserId(nome,email){
 
+    let nomeFormatado = nome
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g,"_");
 
-function createUserId(email) {
 
     const emailMd5 = crypto
         .createHash("md5")
@@ -23,222 +20,101 @@ function createUserId(email) {
         .digest("hex");
 
 
-    const sessionId = crypto.randomUUID();
-
-
-    return `${sessionId}_${emailMd5}`;
+    return `${nomeFormatado}_${emailMd5}`;
 
 }
 
-
-
 const pool = new Pool({
-
     connectionString: callconfigs("postgre"),
-
     ssl:{
         rejectUnauthorized:false
     }
-
 });
 
+module.exports = function loginuser(ws, data, players, clients, lastPing){
 
+    async function checkLogin(){
 
-module.exports = function loginuser(ws, data, players, clients, lastPing) {
+        var email = data.email;
 
+        try{
 
+            let result;
 
-async function checkLogin(){
+            if(data.reconnect === true){
 
+                result = await pool.query(
+                    "SELECT * FROM users WHERE email = $1",
+                    [email]
+                );
 
-    var email = data.email;
+            }else{
 
+                var password = convertmd5(data.pass);
 
+                result = await pool.query(
+                    "SELECT * FROM users WHERE email = $1 AND password = $2",
+                    [
+                        email,
+                        password
+                    ]
+                );
 
-    try{
+            }
 
+            if(result.rows.length > 0){
 
-        let result;
+                const userId = createUserId(
+                    user.nome,
+                    user.email
+                );
 
+                clients.set(ws,userId);
 
+                lastPing[userId] = Date.now();
 
-        // reconexão usando somente email
-        if(data.reconnect === true){
+                const user = result.rows[0];
 
+                players[userId] = {
+                    id:userId,
+                    x:user.posx,
+                    y:user.posy,
+                    stage:user.stage,
+                    animation:"player_idle_down"
+                };
 
-            result = await pool.query(
 
-                "SELECT * FROM users WHERE email = $1",
+                ws.send(JSON.stringify({
+                    message:"userlogued",
+                    email:email,
+                    userid:userId,
+                    posx:user.posx,
+                    posy:user.posy,
+                    stage:user.stage
+                }));
 
-                [
-                    email
-                ]
 
-            );
+            }else{
 
+                ws.send(JSON.stringify({
+                    message:"loginfailed"
+                }));
 
-        }
-        // login normal usando email e senha
-        else{
+            }
 
 
-            var password = convertmd5(data.pass);
+        }catch(err){
 
-
-            result = await pool.query(
-
-                "SELECT * FROM users WHERE email = $1 AND password = $2",
-
-                [
-                    email,
-                    password
-                ]
-
-            );
-
-
-        }
-
-
-
-        if(result.rows.length > 0){
-
-
-
-            const userId = createUserId(email);
-
-
-
-            clients.set(
-
-                ws,
-
-                userId
-
-            );
-
-
-
-            lastPing[userId] = Date.now();
-
-
-
-
-            const user = result.rows[0];
-
-
-
-
-            // coloca somente esse jogador no servidor
-
-            players[userId] = {
-
-
-                id:userId,
-
-
-                x:user.posx,
-
-
-                y:user.posy,
-
-
-                stage:user.stage,
-
-
-                animation:"player_idle_down"
-
-
-            };
-
-
-
-
-
-            // responde somente para esse cliente
+            console.log("ERRO LOGIN:",err);
 
             ws.send(JSON.stringify({
-
-
-                message:"userlogued",
-
-
-                email:email,
-
-
-                userid:userId,
-
-
-                posx:user.posx,
-
-
-                posy:user.posy,
-
-
-                stage:user.stage
-
-
-
+                message:"servererror"
             }));
 
-
-
-
         }
-        else{
-
-
-
-            ws.send(JSON.stringify({
-
-
-                message:"loginfailed"
-
-
-            }));
-
-
-
-        }
-
-
-
-
-    }
-    catch(err){
-
-
-
-        console.log(
-
-            "ERRO LOGIN:",
-
-            err
-
-        );
-
-
-
-        ws.send(JSON.stringify({
-
-
-            message:"servererror"
-
-
-        }));
-
-
 
     }
 
-
-
-}
-
-
-
-checkLogin();
-
-
+    checkLogin();
 
 }
