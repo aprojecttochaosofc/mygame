@@ -98,7 +98,8 @@ wss.on("connection", (ws) => {
             
                 }else{
                  ws.send(JSON.stringify({
-                        message:"notgameentered"
+                        message:"notgameentered",
+                     players:players
                     }));
     
                 }
