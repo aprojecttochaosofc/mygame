@@ -24,9 +24,7 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
-app.get("/cadastro", (req, res) => {
-    login(req, res);
-});
+
 
 
 app.get("/cadastro", (req, res) => {
@@ -36,7 +34,9 @@ app.get("/cadastro", (req, res) => {
 const server = http.createServer(app);
 const wss = new WebSocket.Server({server});
 
-
+app.get("/login", (req, res) => {
+    login(wss,req, res);
+});
 wss.on("connection", (ws) => {
 
     ws.on("message", (msg) => {
