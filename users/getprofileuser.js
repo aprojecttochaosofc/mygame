@@ -51,7 +51,7 @@ module.exports = function getprofileuser(ws,data) {
                }));
 
              }
-      else{
+       }else{
           ws.send(JSON.stringify({
              message:"notreceiveprofile",
              error:"01"
