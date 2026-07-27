@@ -96,6 +96,11 @@ wss.on("connection", (ws) => {
                         message:"gameentered"
                     }));
             
+                }else{
+                 ws.send(JSON.stringify({
+                        message:"notgameentered"
+                    }));
+    
                 }
             
             }
