@@ -3,8 +3,6 @@ module.exports = function playerupdate(data, players) {
 
     if(!data.userid){
 
-        console.log("PLAYER UPDATE SEM ID:", data);
-
         return;
 
     }
