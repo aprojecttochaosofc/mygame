@@ -54,12 +54,13 @@ module.exports = function loginuser(ws,data,players,clients,lastPing){
                 clients.set(ws,userId);
                 lastPing[userId] = Date.now();
 
-                players[userId]={
+               players[userId]={
                     id:userId,
                     x:user.posx,
                     y:user.posy,
                     stage:user.stage,
-                    animation:"player_idle_down"
+                    animation:"player_idle_down",
+                    online:false
                 };
 
                 ws.send(JSON.stringify({
