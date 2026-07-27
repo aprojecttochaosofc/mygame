@@ -7,31 +7,17 @@ function convertmd5(texto){
 }
 
 function createUserId(nome,email){
-
-    let nomeFormatado = nome
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g,"_");
-
-
-    const emailMd5 = crypto
-        .createHash("md5")
-        .update(email.toLowerCase())
-        .digest("hex");
-
-
+    let nomeFormatado = nome.toLowerCase().trim().replace(/\s+/g,"_");
+    const emailMd5 = crypto.createHash("md5").update(email.toLowerCase()).digest("hex");
     return `${nomeFormatado}_${emailMd5}`;
-
 }
 
 const pool = new Pool({
     connectionString: callconfigs("postgre"),
-    ssl:{
-        rejectUnauthorized:false
-    }
+    ssl:{rejectUnauthorized:false}
 });
 
-module.exports = function loginuser(ws, data, players, clients, lastPing){
+module.exports = function loginuser(ws,data,players,clients,lastPing){
 
     async function checkLogin(){
 
@@ -54,35 +40,27 @@ module.exports = function loginuser(ws, data, players, clients, lastPing){
 
                 result = await pool.query(
                     "SELECT * FROM users WHERE email = $1 AND password = $2",
-                    [
-                        email,
-                        password
-                    ]
+                    [email,password]
                 );
 
             }
 
             if(result.rows.length > 0){
 
-                const userId = createUserId(
-                    user.nome,
-                    user.email
-                );
-
-                clients.set(ws,userId);
-
-                lastPing[userId] = Date.now();
-
                 const user = result.rows[0];
 
-                players[userId] = {
+                const userId = createUserId(user.nome,user.email);
+
+                clients.set(ws,userId);
+                lastPing[userId] = Date.now();
+
+                players[userId]={
                     id:userId,
                     x:user.posx,
                     y:user.posy,
                     stage:user.stage,
                     animation:"player_idle_down"
                 };
-
 
                 ws.send(JSON.stringify({
                     message:"userlogued",
@@ -93,7 +71,6 @@ module.exports = function loginuser(ws, data, players, clients, lastPing){
                     stage:user.stage
                 }));
 
-
             }else{
 
                 ws.send(JSON.stringify({
@@ -101,7 +78,6 @@ module.exports = function loginuser(ws, data, players, clients, lastPing){
                 }));
 
             }
-
 
         }catch(err){
 
