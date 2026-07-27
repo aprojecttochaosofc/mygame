@@ -42,30 +42,31 @@ wss.on("connection", (ws) => {
             return;
         }
 
+        switch(data.message){
 
-        if(data.message === "ping"){
+            case 'startserver':
+                ws.send(JSON.stringify({
+                    message:"gamestarted",
+                    datas:data
+                }));
+                break
 
-            if(data.userid){
-                lastPing[data.userid] = Date.now();
-            }
+                
+            case 'ping':
+                 if(data.userid){ lastPing[data.userid] = Date.now(); }
+                    ws.send(JSON.stringify({
+                        message:"pong"
+                    }));
+                break
 
-            ws.send(JSON.stringify({
-                message:"pong"
-            }));
+            case 'loginuser':
+                loginuser(ws,data,players,clients,lastPing);
+                break
+
+            
 
         }
-
-
-        if(data.message === "startserver"){
-
-            ws.send(JSON.stringify({
-                message:"gamestarted",
-                datas:data
-            }));
-
-        }
-
-
+ 
         
 
 
