@@ -96,7 +96,7 @@ wss.on("connection", (ws) => {
 
         if(data.message === "playerupdatepos"){
 
-            playerupdatepos(data);
+            playerupdatepos(ws,data);
 
         }
 
