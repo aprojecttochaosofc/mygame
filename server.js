@@ -10,6 +10,7 @@ const broadcast = require("./users/broadcast");
 const playerupdatepos = require("./users/playerupdatepos");
 const initialpos = require("./users/initialpos");
 const oncloser = require("./users/onclose");
+const login = require("./users/login");
 
 const app = express();
 
@@ -22,6 +23,11 @@ const lastPing = {};
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
+
+app.get("/cadastro", (req, res) => {
+    login(req, res);
+});
+
 
 app.get("/cadastro", (req, res) => {
     cadastro(req, res);
