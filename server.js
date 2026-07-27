@@ -9,8 +9,6 @@ const playerupdate = require("./users/playerupdate");
 const broadcast = require("./users/broadcast");
 const playerupdatepos = require("./users/playerupdatepos");
 const initialpos = require("./users/initialpos");
-const oncloser = require("./users/onclose");
-const login = require("./users/login");
 
 const app = express();
 
@@ -24,9 +22,6 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
-
-
-
 app.get("/cadastro", (req, res) => {
     cadastro(req, res);
 });
@@ -34,9 +29,7 @@ app.get("/cadastro", (req, res) => {
 const server = http.createServer(app);
 const wss = new WebSocket.Server({server});
 
-app.get("/login", (req, res) => {
-    login(wss,req, res);
-});
+
 wss.on("connection", (ws) => {
 
     ws.on("message", (msg) => {
@@ -50,13 +43,129 @@ wss.on("connection", (ws) => {
         }
 
 
-       
+        if(data.message === "ping"){
+
+            if(data.userid){
+                lastPing[data.userid] = Date.now();
+            }
+
+            ws.send(JSON.stringify({
+                message:"pong"
+            }));
+
+        }
+
+
+        if(data.message === "startserver"){
+
+            ws.send(JSON.stringify({
+                message:"gamestarted",
+                datas:data
+            }));
+
+        }
+
+
+        if(data.message === "initialpos"){
+
+            initialpos(ws,data);
+
+        }
+
+
+        if(data.message === "caduser"){
+
+            cadusers(ws,data);
+
+        }
+
+
+        if(data.message === "loginuser"){
+
+            loginuser(ws,data,players,clients,lastPing);
+
+        }
+        if(data.message === "enterGame"){
+            
+                if(players[data.userid]){
+            
+                    players[data.userid].online = true;
+            
+            
+                    ws.send(JSON.stringify({
+                        message:"gameentered"
+                    }));
+            
+                }else{
+                 ws.send(JSON.stringify({
+                        message:"notgameentered",
+                     players:players
+                    }));
+    
+                }
+            
+            }
+
+        if(data.message === "playerupdate"){
+
+            playerupdate(data,players);
+
+        }
+
+
+        if(data.message === "playerupdatepos"){
+
+            playerupdatepos(ws,data);
+
+        }
+
+
+        if(data.message === "disconect"){
+
+            if(data.userid){
+
+                delete players[data.userid];
+
+
+                ws.send(JSON.stringify({
+                    message:"disconected"
+                }));
+
+
+                wss.clients.forEach(client=>{
+
+                    if(client !== ws && client.readyState === WebSocket.OPEN){
+
+                        client.send(JSON.stringify({
+                            message:"playeroffline",
+                            userid:data.userid
+                        }));
+
+                    }
+
+                });
+
+            }
+
+        }
 
 
     });
 
 
-    oncloser(ws,data);
+    ws.on("close",()=>{
+
+        let userid = clients.get(ws);
+
+        if(userid){
+
+            delete players[userid];
+
+            clients.delete(ws);
+
+        }
+
+    });
 
 
 });
