@@ -85,7 +85,20 @@ wss.on("connection", (ws) => {
             loginuser(ws,data,players,clients,lastPing);
 
         }
-
+        if(data.message === "enterGame"){
+            
+                if(players[data.userid]){
+            
+                    players[data.userid].online = true;
+            
+            
+                    ws.send(JSON.stringify({
+                        message:"gameentered"
+                    }));
+            
+                }
+            
+            }
 
         if(data.message === "playerupdate"){
 
