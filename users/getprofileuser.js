@@ -3,7 +3,7 @@ const callconfigs = require("../config");
 
 const pool = new Pool({
     connectionString: callconfigs("postgre"),
-    ssl:{rejectUnauthorized:false}
+    ssl:{rejectUnauthorized:false} 
 });
 
 module.exports = async function getprofileuser(ws,data){
