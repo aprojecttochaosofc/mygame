@@ -1,4 +1,4 @@
-function showLoading(){ 
+function showLoading(){  
 
     if(document.getElementById("loading"))
         return;
