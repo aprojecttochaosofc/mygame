@@ -68,6 +68,7 @@ module.exports = async function getprofileuser(ws,data){
             power:profile.power,
             health:profile.health,
             estrategy:profile.estrategy,
+            speeduser:profile.speeduser
         }));
 
     }catch(err){
