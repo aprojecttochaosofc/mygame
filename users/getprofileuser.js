@@ -40,7 +40,7 @@ module.exports = async function getprofileuser(ws,data){
         }
 
         const profile=result.rows[0];
-
+ 
         ws.send(JSON.stringify({
             message:"receiveprofile",
             nome:profile.nome,
