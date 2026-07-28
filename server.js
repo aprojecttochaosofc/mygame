@@ -61,7 +61,7 @@ wss.on("connection", (ws) => {
                 break
 
             case 'loginuser':
-                loginuser(ws,data,players,clients,lastPing);
+                loginuser(wss,ws,data,players,clients,lastPing);
                 break
 
             case 'getprofileuser':
