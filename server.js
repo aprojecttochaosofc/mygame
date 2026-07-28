@@ -68,6 +68,10 @@ wss.on("connection", (ws) => {
                 getprofileuser(ws,data);
                 break
 
+            case 'initialpos':
+               initialpos(ws, data);
+                break
+
             
 
         }
