@@ -60,7 +60,7 @@ wss.on("connection", (ws) => {
                     }));
                 break
 
-            case 'loginuser':
+            case 'loginuser' || 'reconnect':
                 loginuser(wss,ws,data,players,clients,lastPing);
                 break
 
