@@ -16,7 +16,8 @@ module.exports = function playerupdate(data, players) {
 
         y:data.y,
 
-        animation:data.animation
+        animation:data.animation,
+        time:new Date()
 
     };
 
