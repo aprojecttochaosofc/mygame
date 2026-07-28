@@ -1,5 +1,5 @@
 function showLoading(){  
-
+ 
     if(document.getElementById("loading"))
         return;
 
