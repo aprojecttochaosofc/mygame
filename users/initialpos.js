@@ -9,9 +9,9 @@ const pool = new Pool({
 });
 
 
-module.exports = function initialpos(ws, data) {
+module.exports = async function initialpos(ws, data) {
 
-    async function getPosition(){
+ 
 
         try{
 
@@ -62,9 +62,6 @@ module.exports = function initialpos(ws, data) {
 
         }
 
-    }
-
-
-    getPosition();
+    
 
 };
