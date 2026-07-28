@@ -63,7 +63,11 @@ module.exports = async function getprofileuser(ws,data){
             logoutat:profile.logout_at,
             lastactivity:profile.last_activity,
             criadoem:profile.criado_em,
-            atualizadoem:profile.atualizado_em
+            atualizadoem:profile.atualizado_em,
+            lifeuser:profile.lifeuser,
+            power:profile.power,
+            health:profile.health,
+            estrategy:profile.estrategy,
         }));
 
     }catch(err){
