@@ -221,7 +221,10 @@ function createObjects(type){
 
             return `
                 <h2>Criar Conta</h2>
-                
+                <div class="form-group">
+    <label for="signupImagem">Imagem do Perfil</label>
+    <input type="file" id="signupImagem" accept="image/*">
+</div>
                 <div class="form-group">
                     <label for="signupName">Nome Completo</label>
                     <input type="text" id="signupName" placeholder="Digite seu nome completo">
