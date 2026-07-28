@@ -113,27 +113,22 @@ setInterval(()=>{
 
 setInterval(()=>{
 
-    let now = Date.now();
-
-
-    for(let id in lastPing){
-
-        if(now - lastPing[id] > 10000){
-
-            console.log(
-                "Removendo jogador fantasma:",
-                id
-            );
-
-
+    var now = new Date();
+    for(var id in players){
+        if(now - new Date(players[id].time) > 60000){
+            console.log("Removendo jogador inativo:", id);
             delete players[id];
-            delete lastPing[id];
-
+            wss.clients.forEach(client => {
+                if(client.readyState === 1){
+                    client.send(JSON.stringify({
+                        message:"youdisconected",
+                        userid:id,
+                        players:players
+                    }));
+                }
+            });
         }
-
     }
-
-
 },5000);
 
 
