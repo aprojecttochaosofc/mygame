@@ -72,6 +72,10 @@ wss.on("connection", (ws) => {
                initialpos(ws, data);
                 break
 
+            case 'playerupdatepos':
+               playerupdatepos(ws,data);
+                break
+
             
 
         }
