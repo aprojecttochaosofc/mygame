@@ -17,7 +17,7 @@ const pool = new Pool({
     ssl:{rejectUnauthorized:false}
 });
 
-module.exports = function loginuser(ws,data,players,clients,lastPing){
+module.exports = function loginuser(wss,ws,data,players,clients,lastPing){
 
     async function checkLogin(){
 
@@ -72,7 +72,14 @@ module.exports = function loginuser(ws,data,players,clients,lastPing){
                     posy:user.posy,
                     stage:user.stage
                 }));
-
+                 wss.clients.forEach(client => {
+                    if(client.readyState === 1){           
+                        client.send(JSON.stringify({            
+                            message:"playerssnapshot",            
+                            players:onlinePlayers            
+                        }));           
+                    }            
+                });
             }else{
 
                 ws.send(JSON.stringify({
