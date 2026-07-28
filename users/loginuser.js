@@ -60,7 +60,8 @@ module.exports = function loginuser(wss,ws,data,players,clients,lastPing){
                     x:user.posx,
                     y:user.posy,
                     stage:user.stage,
-                    animation:"player_idle_down"
+                    animation:"player_idle_down",
+                   time:new Date()
                     
                 };
 
